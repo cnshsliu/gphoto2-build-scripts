@@ -1,16 +1,33 @@
 #!/bin/bash
+DIR="$(cd "$(dirname "$0")" && pwd)"
+# set GB_HOME: gphoto2_builder_home
+export GB_HOME=$DIR
+export GB_WORKSPACE="$DIR/workspace"
 
-set -x
-set -e
+if [ ! -e $NDK/ndk-build ]; then
+  echo "NDK environment variable not set correctly, exit...";
+  exit -1;
+fi
 
-# Build libgphoto2
-/scripts/build-libexif
-/scripts/build-libtool
-/scripts/build-libusb
-/scripts/build-libgphoto2
+. $GB_HOME/setenv.sh
 
-# Build gphoto2
-/scripts/build-libpopt
-/scripts/build-gphoto2
+if [ ! -e $SYSROOT/usr/include/stdio.h ]; then
+  echo "NDK SYSROOT environment variable not set correctly, exit...";
+  echo "SYSROOT set to $SYSROOT"
+  exit -1;
+fi
+
+#echo "$@"
+
+# libgphoto2 depends on several libraries, so build them first
+# $DIR/build-libexif 
+$DIR/build-libtool
+exit 0;
+$DIR/build-libusb
+$DIR/build-libgphoto2
+
+# Then uild gphoto2
+$DIR/build-libpopt
+$DIR/build-gphoto2
 
 echo "Done! Build artifacts are in /workspace/_prefix"

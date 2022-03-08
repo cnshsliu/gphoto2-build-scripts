@@ -4,4 +4,4 @@ REPO_NAME=libtool
 REPO_URL=https://git.savannah.gnu.org/git/libtool.git
 BINARY_PATH=lib/libltdl.so
 
-$GB_HOME/build-generic $REPO_NAME $REPO_URL $BINARY_PATH $COPY_FROM
+/scripts/build-generic $REPO_NAME $REPO_URL $BINARY_PATH
